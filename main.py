@@ -52,11 +52,11 @@ def main():
     # Alice
 
     alice_msg = "Alice sent this message"
-    print("Alice would like to sign the following message, to prove she sent it:\n" + alice_msg)
+    print("Alice would like to sign the following message, to prove she sent it:\n\"" + alice_msg + "\"")
 
     alice_enc_msg = alice_msg.encode('utf-8')
     alice_padded_msg = pad(alice_enc_msg)
-    print(f"\nPadded message: \"{alice_padded_msg}\"")
+    print(f"\nPadded message: {alice_padded_msg}")
 
     alice_hashed_msg = hasher(alice_padded_msg)
     print("SHA256 digest: " + alice_hashed_msg)
@@ -66,15 +66,15 @@ def main():
 
     # Bob
 
-    print("\n" + ('-' * 65) + "\n")
-    print("Bob would like to verify that Alice sent the message:.\n" +
+    print('-' * 65)
+    print("Bob would like to verify that Alice sent the message.\n" +
           "Bob receives both the message, and the signature. He can\n" +
           "recalculate the hash to verify the signature.")
 
     bob_msg = alice_msg
     bob_enc_msg = bob_msg.encode('utf-8')
     bob_padded_msg = pad(bob_enc_msg)
-    print(f"\nPadded message: \"{bob_padded_msg}\"")
+    print(f"\nPadded message: {bob_padded_msg}")
 
     bob_hashed_msg = hasher(bob_padded_msg)
     print("SHA256 digest: " + alice_hashed_msg)
@@ -82,7 +82,6 @@ def main():
     bob_hash_remainder = pow(int(bob_hashed_msg, 16), 1, MODULUS)  # bob_hashed_msg % MODULUS
     print("Remainder of hash: " + hex(bob_hash_remainder))
 
-    print(hex(signature))
     decoded_sig = verify(signature)
     print("Decoded signature: " + hex(decoded_sig))
 
@@ -93,12 +92,11 @@ def main():
     input("\nPress Enter to see an example of the math used...")
 
     # Math explained
-    print("-" * 65 + "\nPRIV key: 17 || PUB key: 413 || Modulus: 3233")
-    print("17 * 413 = 3233")
+    print("=" * 65 + "\nPRIV key: 17 || PUB key: 413 || Modulus: 3233")
 
-    print(f"\n5 % 3233 = {pow(5,1,3233)} (hash to check against)")
+    print(f"\n5 % 3233 = {pow(5,1,3233)} (hash remainder to check against)")
     print(f"\n5^PRIV % 3233 = 5^17 % 3233 = {pow(5,17,3233)} (signature)")
-    print(f"3086^PUB % 3233 = 3086^413 % 3233 = {pow(3086,17, 3233)}")
+    print(f"3086^PUB % 3233 = 3086^413 % 3233 = {pow(3086,413,3233)} (decoded signature)")
 
     print("\n5 mod 3233 == ((5^17)^413) mod 3233 == ((5^413)^17) mod 3233 == 5")
 
